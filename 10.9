@@ -1,0 +1,56 @@
+函数的递归实现求斐波那契数
+#define _CRT_SECURE_NO_WARNINGS 1
+#include <stdio.h>
+//递归和非递归分别实现求第n个斐波那契数
+//非递归
+//int fib(int n)
+//{
+//	int a = 1;
+//	int b = 1;
+//	int sum = 0;
+//	int i = 0;
+//	if (n<=2)
+//	{
+//	return 1;
+//	}
+//	else
+//	{
+//	for (i=3; i <= n; i++)
+//	{
+//	sum = a + b;
+//	a = b;
+//	b = sum;
+//	}
+//	return sum;
+//	}
+//}
+//
+//int main()
+//{
+//	int n;
+//	printf(“Input:\n”);
+//	scanf("%d", &n);
+//	int tmp = fib(n);
+//	printf("%d\n", tmp);
+//	return 0;
+//}
+
+//递归
+//int fib(int n)
+//{
+//	if (n<=2)
+//	{
+//	return 1;
+//	}
+//	return fib(n - 1) + fib(n - 2);//进入递归
+//}
+//
+//int main()
+//{
+//	int n;
+//	printf(“Input:\n”);
+//	scanf("%d", &n);
+//	int tmp = fib(n);
+//	printf("%d\n", tmp);
+//	return 0;
+//}
