@@ -1,0 +1,170 @@
+game.h
+#define _CRT_SECURE_NO_WARNINGS 1
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#define ROW 9
+#define COL 9
+
+#define EASY_COUNT 40
+
+
+#define ROWS ROW+2
+#define COLS COL+2
+
+void VoidBoard(char board[ROWS][COLS], int rows, int cols, char set);
+void Display(char board[ROWS][COLS], int row, int col);
+void BuildMine(char board[ROWS][COLS], int row, int col);
+void FindMine(char mine[ROWS][COLS], char show[ROWS][COLS], int row, int col); 
+game.c
+
+#define _CRT_SECURE_NO_WARNINGS 1
+#include "game.h"
+void VoidBoard(char board[ROWS][COLS], int rows, int cols,char tmp)
+{
+	int i = 0;
+	int j = 0;
+	for (i = 0; i < rows; i++)
+	{
+		for (j = 0; j < cols; j++)
+		{
+			board[i][j] = tmp;
+		}
+	}
+}
+void Display(char board[ROWS][COLS], int row, int col)
+{
+	int i = 0;
+	int j = 0;
+	for (i = 0; i <= col; i++)
+	{
+		printf("%d ", i);
+	}
+	printf("\n");
+	for (i = 1; i <= row; i++)
+	{
+		printf("%d ", i);
+		for (j = 1; j <= col; j++)
+		{
+			printf("%c ", board[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+}
+void BuildMine(char board[ROWS][COLS], int row, int col)
+{
+	int count = EASY_COUNT;
+	while (count)
+	{
+		int x = rand() % row + 1;
+		int y = rand() % col + 1;
+		if (board[x][y] == '0')
+		{
+			board[x][y] = '1';
+			count--;
+		}
+	}
+
+}
+int GetMineCount(char board[ROWS][COLS], int x, int y)
+{
+	return board[x - 1][y] + board[x - 1][y - 1] + board[x][y - 1] + board[x + 1][y - 1] +
+		board[x + 1][y] + board[x + 1][y + 1] + board[x][y + 1] + board[x - 1][y + 1] - (8 * '0');
+}
+
+void FindMine(char mine[ROWS][COLS], char show[ROWS][COLS], int row, int col)
+{
+	int x = 0;
+	int y = 0;
+	int win = 0;
+	while (win<row*col - EASY_COUNT)
+	{
+		printf("请输入排查的坐标:");
+		scanf("%d%d", &x, &y);
+		if (x >= 1 && x <= row && y >= 1 && y <= col)
+		{
+			if (mine[x][y] == '1')
+			{
+				printf("BOOM，你被炸死了！！！\n");
+				Display(mine, row, col);
+				break;
+			}
+			else
+			{
+				int count = GetMineCount(mine, x, y);
+				show[x][y] = count + '0';
+				Display(show, row, col);
+				win++;
+			}
+		}
+		else
+		{
+			printf("坐标非法,请重新输入！！！\n");
+		}
+	}
+	if (win == row*col - EASY_COUNT)
+	{
+		printf("恭喜你， 排雷成功！！！\n");
+		Display(mine, row, col);
+	}
+}
+
+test.c
+
+#define _CRT_SECURE_NO_WARNINGS 1
+#include "game.h"
+#include <time.h>
+
+void Game()
+{
+	char mine[ROWS][COLS] = {0};//雷的排布
+	char show[ROWS][COLS] = {0};//排查
+	//初始化
+	VoidBoard(mine, ROWS, COLS,'0');
+	VoidBoard(show, ROWS, COLS,'*'); 
+	
+	Display(show, ROW, COL);
+	//布置雷
+	Display(mine, ROW, COL);
+	FindMine(mine, show,ROW, COL);
+}
+
+void Menu()
+{
+	printf("*****************************************\n");
+	printf("************    1.开始游戏   ************\n");
+	printf("************    0.退出游戏   ************\n");
+	printf("*****************************************\n");
+	printf("*****************************************\n");
+}
+
+void Test()
+{
+	int Input = 0;
+	srand((unsigned int)time(NULL));
+	do
+	{
+		Menu();
+		printf("请选择：\n");
+		scanf("%d", &Input);
+		switch (Input)
+		{
+		case 1:
+			Game();
+			break;
+		case 0:
+			printf("退出游戏！！！\n");
+			break;
+		default:
+			printf("输入错误，请重新输入！！！\n");
+			break;
+		}
+	} while (Input);
+}
+
+int main()
+{
+	Test();
+		return 0;
+}
